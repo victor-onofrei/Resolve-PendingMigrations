@@ -1,7 +1,7 @@
 $input_path = "$env:homeshare\VDI-UserData\Download\generic\inputs"
 $output_path = "$env:homeshare\VDI-UserData\Download\generic\outputs\pending_mig"
 $file_name = "pending_mig.csv"
-$all_mailboxes = Get-Content $path\$file_name
+$all_mailboxes = Get-Content $input_path\$file_name
 
 foreach ($user in $all_mailboxes)
 {
