@@ -14,7 +14,7 @@ foreach ($user in $all_mailboxes)
             Disable-Mailbox -Identity $mailbox.Alias -Confirm:$false
             $routing_address = (Get-OrganizationConfig | Select -ExpandProperty MicrosoftExchangeRecipientEmailAddresses`
             | ? {$_ -like "*mail.onmicrosoft.com"}).Split("@")[1]
-            Enable-RemoteMailbox $mailbox.Alias -RemoteRoutingAddress "$user@rwe.mail.onmicrosoft.com"
+            Enable-RemoteMailbox $mailbox.Alias -RemoteRoutingAddress "$user@$routing_address"
             Set-RemotMailbox $mailbox.UserPrincipalName -EmailAddresses $mailbox.EmailAddresses`
             -EmailAddressPolicyEnabled $false
         } else {Write-Host "Mailbox" $user "has on-premise archive"}
