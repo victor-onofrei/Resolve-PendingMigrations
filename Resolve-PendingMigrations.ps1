@@ -1,7 +1,15 @@
-$input_path = "$env:homeshare\VDI-UserData\Download\generic\inputs"
-$output_path = "$env:homeshare\VDI-UserData\Download\generic\outputs\pending_mig"
-$file_name = "pending_mig.csv"
-$all_mailboxes = Get-Content $input_path\$file_name
+param (
+    [String]$inputPath = "$env:homeshare\VDI-UserData\Download\generic\inputs\",
+    [String]$fileName = "pending_migrations.csv",
+    [String]$outputPath = "$env:homeshare\VDI-UserData\Download\generic\outputs\pending_mig"
+    [String]$user = $null
+)
+
+if ($user) {
+    $allMailboxes = @($user)
+} else {
+    $allMailboxes = Get-Content "$inputPath\$fileName"
+}
 
 foreach ($user in $all_mailboxes)
 {
