@@ -13,13 +13,13 @@ if ($user) {
 
 $routingAddress = (
     Get-OrganizationConfig | `
-    Select -ExpandProperty MicrosoftExchangeRecipientEmailAddresses | `
-    ? {$_ -like "*mail.onmicrosoft.com"}
+    Select-Object -ExpandProperty MicrosoftExchangeRecipientEmailAddresses | `
+    Where-Object {$_ -like "*mail.onmicrosoft.com"}
 ).Split("@")[1]
 
 foreach ($user in $allMailboxes)
 {
-    $itemCount = Get-MailboxStatistics $user | Select -ExpandProperty ItemCount
+    $itemCount = Get-MailboxStatistics $user | Select-Object -ExpandProperty ItemCount
     if ($itemCount -le "300") {
         $mailbox = Get-Mailbox -Identity $user -ResultSize Unlimited
         $mailbox.EmailAddresses > $outputPath\$user.txt
