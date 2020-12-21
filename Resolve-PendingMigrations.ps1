@@ -20,13 +20,13 @@ $routingAddress = (
 foreach ($mailbox in $allMailboxes) {
     $itemCount = Get-MailboxStatistics $mailbox | Select-Object -ExpandProperty ItemCount
     if ($itemCount -le "300") {
-        $mailboxOutput = Get-Mailbox -Identity $mailbox
-        $mailboxOutput.EmailAddresses > $outputPath\$mailbox.txt
-        $hasArchive = ($mailboxOutput.archiveGuid -ne "00000000-0000-0000-0000-000000000000") -and $mailboxOutput.archiveDatabase
+        $mailboxInfo = Get-Mailbox -Identity $mailbox
+        $mailboxInfo.EmailAddresses > $outputPath\$mailbox.txt
+        $hasArchive = ($mailboxInfo.archiveGuid -ne "00000000-0000-0000-0000-000000000000") -and $mailboxInfo.archiveDatabase
         if (!$hasArchive) {
-            Disable-Mailbox -Identity $mailboxOutput.Alias -Confirm:$false
-            Enable-RemoteMailbox $mailboxOutput.Alias -RemoteRoutingAddress "$mailbox@$routingAddress"
-            Set-RemoteMailbox $mailboxOutput.UserPrincipalName -EmailAddresses $mailboxOutput.EmailAddresses `
+            Disable-Mailbox -Identity $mailboxInfo.Alias -Confirm:$false
+            Enable-RemoteMailbox $mailboxInfo.Alias -RemoteRoutingAddress "$mailbox@$routingAddress"
+            Set-RemoteMailbox $mailboxInfo.UserPrincipalName -EmailAddresses $mailboxInfo.EmailAddresses `
              -EmailAddressPolicyEnabled $false
         } else {
             Write-Host "Mailbox" $mailbox "has on-premise archive"
