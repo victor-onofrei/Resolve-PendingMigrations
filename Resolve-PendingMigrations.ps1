@@ -1,7 +1,7 @@
 param (
     [String]$inputPath = "$env:homeshare\VDI-UserData\Download\generic\inputs\",
     [String]$fileName = "pending_migrations.csv",
-    [String]$outputPath = "$env:homeshare\VDI-UserData\Download\generic\outputs\pending_mig"
+    [String]$outputPath = "$env:homeshare\VDI-UserData\Download\generic\outputs\pending_mig",
     [String]$user = $null
 )
 
