@@ -17,8 +17,7 @@ $routingAddress = (
     Where-Object {$_ -like "*mail.onmicrosoft.com"}
 ).Split("@")[1]
 
-foreach ($mailbox in $allMailboxes)
-{
+foreach ($mailbox in $allMailboxes) {
     $itemCount = Get-MailboxStatistics $mailbox | Select-Object -ExpandProperty ItemCount
     if ($itemCount -le "300") {
         $mailboxOutput = Get-Mailbox -Identity $mailbox
@@ -29,6 +28,10 @@ foreach ($mailbox in $allMailboxes)
             Enable-RemoteMailbox $mailboxOutput.Alias -RemoteRoutingAddress "$mailbox@$routingAddress"
             Set-RemoteMailbox $mailboxOutput.UserPrincipalName -EmailAddresses $mailboxOutput.EmailAddresses `
              -EmailAddressPolicyEnabled $false
-        } else {Write-Host "Mailbox" $mailbox "has on-premise archive"}
-    } else {Write-Host "Mailbox" $mailbox "has on-premise content"}
+        } else {
+            Write-Host "Mailbox" $mailbox "has on-premise archive"
+        }
+    } else {
+        Write-Host "Mailbox" $mailbox "has on-premise content"
+    }
 }
