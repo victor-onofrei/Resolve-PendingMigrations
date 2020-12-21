@@ -11,6 +11,12 @@ if ($user) {
     $allMailboxes = Get-Content "$inputPath\$fileName"
 }
 
+$routingAddress = (
+    Get-OrganizationConfig | `
+    Select -ExpandProperty MicrosoftExchangeRecipientEmailAddresses | `
+    ? {$_ -like "*mail.onmicrosoft.com"}
+).Split("@")[1]
+
 foreach ($user in $allMailboxes)
 {
     $itemCount = Get-MailboxStatistics $user | Select -ExpandProperty ItemCount
@@ -20,8 +26,6 @@ foreach ($user in $allMailboxes)
         $archiveState = (Get-Mailbox -Identity $mailbox.Alias).ArchiveState
         if ($archiveState -eq "None") {
             Disable-Mailbox -Identity $mailbox.Alias -Confirm:$false
-            $routingAddress = (Get-OrganizationConfig | Select -ExpandProperty MicrosoftExchangeRecipientEmailAddresses | `
-             ? {$_ -like "*mail.onmicrosoft.com"}).Split("@")[1]
             Enable-RemoteMailbox $mailbox.Alias -RemoteRoutingAddress "$user@$routingAddress"
             Set-RemoteMailbox $mailbox.UserPrincipalName -EmailAddresses $mailbox.EmailAddresses `
              -EmailAddressPolicyEnabled $false
