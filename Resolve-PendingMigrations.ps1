@@ -11,18 +11,18 @@ if ($user) {
     $allMailboxes = Get-Content "$inputPath\$fileName"
 }
 
-foreach ($user in $all_mailboxes)
+foreach ($user in $allMailboxes)
 {
-    $item_count = Get-MailboxStatistics $user | select -ExpandProperty ItemCount
-    if ($item_count -le "300") {
+    $itemCount = Get-MailboxStatistics $user | Select -ExpandProperty ItemCount
+    if ($itemCount -le "300") {
         $mailbox = Get-Mailbox -Identity $user -ResultSize Unlimited
-        $mailbox.EmailAddresses > $output_path\$user.txt
-        $archive_state = (Get-Mailbox -Identity $mailbox.Alias).ArchiveState
-        if ($archive_state -eq "None") {
+        $mailbox.EmailAddresses > $outputPath\$user.txt
+        $archiveState = (Get-Mailbox -Identity $mailbox.Alias).ArchiveState
+        if ($archiveState -eq "None") {
             Disable-Mailbox -Identity $mailbox.Alias -Confirm:$false
-            $routing_address = (Get-OrganizationConfig | Select -ExpandProperty MicrosoftExchangeRecipientEmailAddresses | `
+            $routingAddress = (Get-OrganizationConfig | Select -ExpandProperty MicrosoftExchangeRecipientEmailAddresses | `
              ? {$_ -like "*mail.onmicrosoft.com"}).Split("@")[1]
-            Enable-RemoteMailbox $mailbox.Alias -RemoteRoutingAddress "$user@$routing_address"
+            Enable-RemoteMailbox $mailbox.Alias -RemoteRoutingAddress "$user@$routingAddress"
             Set-RemoteMailbox $mailbox.UserPrincipalName -EmailAddresses $mailbox.EmailAddresses `
              -EmailAddressPolicyEnabled $false
         } else {Write-Host "Mailbox" $user "has on-premise archive"}
