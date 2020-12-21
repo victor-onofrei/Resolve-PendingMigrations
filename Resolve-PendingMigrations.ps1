@@ -23,7 +23,8 @@ foreach ($mailbox in $allMailboxes)
     if ($itemCount -le "300") {
         $mailboxOutput = Get-Mailbox -Identity $mailbox
         $mailboxOutput.EmailAddresses > $outputPath\$mailbox.txt
-        if ($mailboxOutput.archiveState -eq "None") {
+        $hasArchive = ($mailboxOutput.archiveGuid -ne "00000000-0000-0000-0000-000000000000") -and $mailboxOutput.archiveDatabase
+        if (!$hasArchive) {
             Disable-Mailbox -Identity $mailboxOutput.Alias -Confirm:$false
             Enable-RemoteMailbox $mailboxOutput.Alias -RemoteRoutingAddress "$mailbox@$routingAddress"
             Set-RemoteMailbox $mailboxOutput.UserPrincipalName -EmailAddresses $mailboxOutput.EmailAddresses `
