@@ -29,9 +29,9 @@ foreach ($mailbox in $allMailboxes) {
             Set-RemoteMailbox $mailboxInfo.UserPrincipalName -EmailAddresses $mailboxInfo.EmailAddresses `
              -EmailAddressPolicyEnabled $false
         } else {
-            Write-Host "Mailbox" $mailbox "has on-premise archive"
+            Write-Warning "Mailbox $mailbox has on-premise archive"
         }
     } else {
-        Write-Host "Mailbox" $mailbox "has on-premise content"
+        Write-Warning "Mailbox $mailbox has on-premise content"
     }
 }
