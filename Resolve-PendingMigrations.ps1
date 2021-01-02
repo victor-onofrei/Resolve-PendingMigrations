@@ -29,9 +29,41 @@ foreach ($mailbox in $allMailboxes) {
             Set-RemoteMailbox $mailboxInfo.UserPrincipalName -EmailAddresses $mailboxInfo.EmailAddresses `
              -EmailAddressPolicyEnabled $false
         } else {
-            Write-Warning "Mailbox $mailbox has on-premise archive"
+            [System.String]$message = "Mailbox $mailbox has on-premise archive enabled. Processing the script requires permanently " +
+            "disabling the archive which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Script aborting..."
+            [System.Management.Automation.PSInvalidCastException]$exception = New-Object -TypeName System.Management.Automation.PSInvalidCastException `
+                -ArgumentList `
+                    $message
+            [System.Management.Automation.ErrorRecord]$errorRecord = New-Object -TypeName System.Management.Automation.ErrorRecord `
+                -ArgumentList `
+                    $exception,
+                    'ArchiveEnabled',
+                    ([System.Management.Automation.ErrorCategory]::PermissionDenied),
+                    $mailbox
+            $errorArguments = @{
+                Exception = $errorRecord.Exception
+                ErrorId = $errorRecord.FullyQualifiedErrorId
+                TargetObject = $errorRecord.TargetObject
+            }
+            Write-Error @errorArguments
         }
     } else {
-        Write-Warning "Mailbox $mailbox has on-premise content"
+        [System.String]$message = "Mailbox $mailbox has on-premise content above threshold. Processing the script requires permanently " +
+        "disabling the mailbox which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Script aborting..."
+        [System.Management.Automation.PSInvalidCastException]$exception = New-Object -TypeName System.Management.Automation.PSInvalidCastException `
+            -ArgumentList `
+                $message
+        [System.Management.Automation.ErrorRecord]$errorRecord = New-Object -TypeName System.Management.Automation.ErrorRecord `
+            -ArgumentList `
+                $exception,
+                'ContentAboveThreshold',
+                ([System.Management.Automation.ErrorCategory]::PermissionDenied),
+                $mailbox
+            $errorArguments = @{
+                Exception = $errorRecord.Exception
+                ErrorId = $errorRecord.FullyQualifiedErrorId
+                TargetObject = $errorRecord.TargetObject
+            }
+            Write-Error @errorArguments
     }
 }
