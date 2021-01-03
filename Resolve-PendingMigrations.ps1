@@ -30,7 +30,7 @@ foreach ($mailbox in $allMailboxes) {
              -EmailAddressPolicyEnabled $false
         } else {
             [System.String]$message = "Mailbox $mailbox has on-premise archive enabled. Processing the script requires permanently " +
-                "disabling the archive which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Script aborting..."
+                "disabling the archive which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Skipping this mailbox..."
             [System.Management.Automation.PSInvalidCastException]$exception = New-Object `
                 -TypeName System.Management.Automation.PSInvalidCastException `
                 -ArgumentList $message
@@ -45,7 +45,7 @@ foreach ($mailbox in $allMailboxes) {
         }
     } else {
         [System.String]$message = "Mailbox $mailbox has on-premise content above threshold. Processing the script requires permanently " +
-            "disabling the mailbox which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Script aborting..."
+            "disabling the mailbox which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Skipping this mailbox..."
         [System.Management.Automation.PSInvalidCastException]$exception = New-Object `
             -TypeName System.Management.Automation.PSInvalidCastException `
             -ArgumentList $message
