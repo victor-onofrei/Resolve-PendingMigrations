@@ -41,7 +41,7 @@ foreach ($mailbox in $allMailboxes) {
                     'ArchiveEnabled',
                     ([System.Management.Automation.ErrorCategory]::PermissionDenied),
                     $mailbox
-            Write-Error -ErrorRecord $errorArguments
+            Write-Error -ErrorRecord $errorRecord
         }
     } else {
         [System.String]$message = "Mailbox $mailbox has on-premise content above threshold. Processing the script requires permanently " +
@@ -56,11 +56,6 @@ foreach ($mailbox in $allMailboxes) {
                 'ContentAboveThreshold',
                 ([System.Management.Automation.ErrorCategory]::PermissionDenied),
                 $mailbox
-            $errorArguments = @{
-                Exception = $errorRecord.Exception
-                ErrorId = $errorRecord.FullyQualifiedErrorId
-                TargetObject = $errorRecord.TargetObject
-            }
-            Write-Error @errorArguments
+            Write-Error -ErrorRecord $errorRecord
     }
 }
