@@ -46,9 +46,9 @@ foreach ($mailbox in $allMailboxes) {
     } else {
         [System.String]$message = "Mailbox $mailbox has on-premise content above threshold. Processing the script requires permanently " +
         "disabling the mailbox which will result in data loss. Consider merging the 2 mailbox objects manually after backup. Script aborting..."
-        [System.Management.Automation.PSInvalidCastException]$exception = New-Object -TypeName System.Management.Automation.PSInvalidCastException `
-            -ArgumentList `
-                $message
+        [System.Management.Automation.PSInvalidCastException]$exception = New-Object `
+            -TypeName System.Management.Automation.PSInvalidCastException `
+            -ArgumentList $message
         [System.Management.Automation.ErrorRecord]$errorRecord = New-Object `
             -TypeName System.Management.Automation.ErrorRecord `
             -ArgumentList `
