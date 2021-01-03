@@ -54,7 +54,8 @@ foreach ($mailbox in $allMailboxes) {
         [System.Management.Automation.PSInvalidCastException]$exception = New-Object -TypeName System.Management.Automation.PSInvalidCastException `
             -ArgumentList `
                 $message
-        [System.Management.Automation.ErrorRecord]$errorRecord = New-Object -TypeName System.Management.Automation.ErrorRecord `
+        [System.Management.Automation.ErrorRecord]$errorRecord = New-Object `
+            -TypeName System.Management.Automation.ErrorRecord `
             -ArgumentList `
                 $exception,
                 'ContentAboveThreshold',
